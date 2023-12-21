@@ -6,10 +6,15 @@ import Rectangle from "./Rectangle";
 type Props = {};
 
 const Canvas = (props: Props) => {
-  const [canvas, setCanvas] = useState<fabric.Canvas>();
+  const [canvas, setCanvas] = useState<fabric.Canvas | null>(null);
 
   useEffect(() => {
-    setCanvas(initCanvas());
+    const canvas = initCanvas();
+    setCanvas(canvas);
+
+    return () => {
+      canvas.dispose();
+    };
   }, []);
 
   const initCanvas = () => {
@@ -17,7 +22,7 @@ const Canvas = (props: Props) => {
       selection: true,
       height: 800,
       width: 800,
-      backgroundColor: "gray",
+      backgroundColor: "red",
     });
 
     return canvasInstance;
@@ -27,7 +32,7 @@ const Canvas = (props: Props) => {
     <>
       <div>
         <Rectangle canvas={canvas} />
-        <canvas id="canvas" style={{ border: "1px solid black" }} />
+        <canvas id="canvas" width={800} height={600} />
       </div>
     </>
   );
