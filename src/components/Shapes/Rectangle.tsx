@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { fabric } from "fabric";
+import { IconNode, RectangleVertical } from "lucide";
+
+import { Button } from "../UI/button";
 
 type Props = {
   canvas: fabric.Canvas;
+  icon: React.ReactNode;
 };
 
-const Rectangle: React.FC<Props> = ({ canvas }) => {
+const Rectangle: React.FC<Props> = ({ canvas, icon }) => {
   const [rect, setRect] = useState<fabric.Rect | null>(null);
 
   const addRectangle = (canvas: fabric.Canvas) => {
@@ -14,22 +18,23 @@ const Rectangle: React.FC<Props> = ({ canvas }) => {
       top: 10,
       height: 280,
       width: 200,
-      fill: "red",
       selectable: true,
       evented: true,
       hasControls: true,
       hasBorders: true,
+      hasRotatingPoint: true
     });
     setRect(rect);
     console.log("Rectangle clicked!");
     rect.set("fill", "blue");
     canvas.add(rect);
+    rect.center();
     canvas.renderAll();
   };
 
   useEffect(() => {
-    const handleKeyDown = (event: Event) => {
-      if (event.code === "Delete") {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.code === "Backspace") {
         const activeObject = canvas.getActiveObject();
 
         if (activeObject) {
@@ -48,7 +53,9 @@ const Rectangle: React.FC<Props> = ({ canvas }) => {
 
   return (
     <div>
-      <button onClick={() => addRectangle(canvas!)}>Add Rectangle</button>
+      <div className="" onClick={() => addRectangle(canvas!)}>
+        Rectangle {icon}
+      </div>
     </div>
   );
 };
